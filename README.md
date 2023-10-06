@@ -8,9 +8,17 @@ This repo is the example repo for [a StackOverflow answer](https://stackoverflow
 - Install dependencies with `npm install`
 - Run the Next.js server locally with `npm run dev`
 
-## Salient Points of the Architecture
+# Salient Points of the Architecture
 
-### Reference to the global `window.utag` object is stored in context
+## [Store Tealium account info in public environment variables](https://github.com/danielbank/react-tealium-example/blob/main/.env.example#L12-L14)
+
+Tealium account info is in the vendor script url, so it is public information. With public environment variables, it gets inlined into the JavaScript sent to the browser.
+
+## [Load Tealium script](https://github.com/danielbank/react-tealium-example/blob/main/src/pages/index.tsx#L32-L63)
+
+Tealium script is loaded at the page-level at the end of the page.
+
+## [Store reference to `window.utag` in context](https://github.com/danielbank/react-tealium-example/blob/main/hooks/useUtag.tsx#L49)
 
 The useState and useEffect approach for polling for the utag object on the window could probably be improved. Regardless, the net result is the value changes from an `EmptyUtag` object (that discards calls) to a reference to the `window.utag` global object.
 
@@ -18,7 +26,7 @@ The useState and useEffect approach for polling for the utag object on the windo
 <UtagContext.Provider value={utag}>{children}</UtagContext.Provider>
 ```
 
-### App-level component is wrapped with context provider
+## [Wrap App component with a context provider](https://github.com/danielbank/react-tealium-example/blob/main/src/pages/_app.tsx#L7-L9)
 
 The App component is wrapped with `UtagProvider` so that individual page's can use the utag value in their logic.
 
@@ -32,7 +40,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 };
 ```
 
-### Explicitly handle page views
+## [Explicitly handle page views](https://github.com/danielbank/react-tealium-example/blob/main/src/pages/index.tsx#L17-L20)
 
 Page views are handled explicitly in Page-level component useEffect
 
@@ -43,7 +51,7 @@ useEffect(() => {
 }, [utag]);
 ```
 
-### Events are tracked at the component level
+## [Track events at the component-level](https://github.com/danielbank/react-tealium-example/blob/main/components/ShirtsForm.tsx#L16-L22)
 
 ```
 <input
